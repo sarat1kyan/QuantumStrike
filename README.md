@@ -49,9 +49,13 @@ Progress bars.
 Tabular results for clarity.
 
 🌌 **Why QuantumStrike?**
+
 🕒 Save Time: Automates tedious tasks like setting up tools and parsing scan results.
+
 🎯 Smarter Results: Combines automation with AI for a comprehensive approach to penetration testing.
+
 🤝 Collaboration Ready: Designed for security teams and solo practitioners alike.
+
 🌱 Beginner-Friendly: Clear prompts, guided workflows, and actionable outputs.
 
 **How QuantumStrike Works**
