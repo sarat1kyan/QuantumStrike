@@ -58,7 +58,7 @@ def parse_tool_output(output, pattern):
     return parsed
 
 def interactive_mode():
-    target = questionary.text("Enter the domain or IP address of the target:").ask()
+    target = questionary.txt("Enter the domain or IP address of the target:").ask()
     scan_tools = questionary.checkbox(
         "Select scanning tools to use:", choices=["nmap", "masscan", "nikto", "amass"]
     ).ask()
@@ -104,9 +104,9 @@ def generate_report(target, scan_data):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt=f"Penetration Testing Report: {target}", ln=True, align="C")
+    pdf.cell(200, 10, text=f"Penetration Testing Report: {target}", ln=True, align="C")
     for tool, results in scan_data.items():
-        pdf.cell(200, 10, txt=f"{tool.upper()} Results:", ln=True)
+        pdf.cell(200, 10, text=f"{tool.upper()} Results:", ln=True)
         if isinstance(results, list):
             for result in results:
                 pdf.multi_cell(0, 10, str(result))
