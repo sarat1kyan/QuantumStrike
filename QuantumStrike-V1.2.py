@@ -103,7 +103,7 @@ def summarize_scan_results(scan_data):
 def generate_report(target, scan_data):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", size=12)
+    pdf.set_font("Helvetica", size=12)
     pdf.cell(200, 10, text=f"Penetration Testing Report: {target}", new_x="LMARGIN", new_y="NEXT", align="C")
     for tool, results in scan_data.items():
         pdf.cell(200, 10, text=f"{tool.upper()} Results:", new_x="LMARGIN", new_y="NEXT")
