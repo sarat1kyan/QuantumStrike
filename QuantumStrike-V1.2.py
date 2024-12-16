@@ -58,7 +58,7 @@ def parse_tool_output(output, pattern):
     return parsed
 
 def interactive_mode():
-    target = questionary.txt("Enter the domain or IP address of the target:").ask()
+    target = questionary.text("Enter the domain or IP address of the target:").ask()
     scan_tools = questionary.checkbox(
         "Select scanning tools to use:", choices=["nmap", "masscan", "nikto", "amass"]
     ).ask()
