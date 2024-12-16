@@ -104,9 +104,9 @@ def generate_report(target, scan_data):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, text=f"Penetration Testing Report: {target}", ln=True, align="C")
+    pdf.cell(200, 10, text=f"Penetration Testing Report: {target}", new_x="LMARGIN", new_y="NEXT", align="C")
     for tool, results in scan_data.items():
-        pdf.cell(200, 10, text=f"{tool.upper()} Results:", ln=True)
+        pdf.cell(200, 10, text=f"{tool.upper()} Results:", new_x="LMARGIN", new_y="NEXT")
         if isinstance(results, list):
             for result in results:
                 pdf.multi_cell(0, 10, str(result))
