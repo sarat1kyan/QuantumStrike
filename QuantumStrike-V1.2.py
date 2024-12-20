@@ -48,6 +48,12 @@ def execute_command(command):
         logging.error(f"Command '{' '.join(command)}' failed: {e.stderr}")
         return None
 
+def validate_target(target):
+    if not re.match(r"^(\d{1,3}\.){3}\d{1,3}$|^(([a-zA-Z0-9-_]+\.)+[a-zA-Z]{2,})$", target):
+        console.print("[red]Invalid target! Please enter a valid domain or IP address.[/red]")
+        return False
+    return True
+
 def parse_tool_output(output, pattern):
     parsed = []
     lines = output.split("\n")
@@ -59,12 +65,20 @@ def parse_tool_output(output, pattern):
 
 def interactive_mode():
     target = questionary.text("Enter the domain or IP address of the target:").ask()
+    if not validate_target(target):
+        return
+
     scan_tools = questionary.checkbox(
         "Select scanning tools to use:", choices=["nmap", "masscan", "nikto", "amass"]
     ).ask()
-    
+
+    if not scan_tools:
+        console.print("[red]No tools selected! Exiting interactive mode.[/red]")
+        return
+
     scan_results = {}
     for tool in scan_tools:
+        console.print(f"[cyan]Running {tool} on {target}...[/cyan]")
         if tool == "nmap":
             output = execute_command(["nmap", "-A", target])
             if output:
@@ -81,7 +95,7 @@ def interactive_mode():
             output = execute_command(["amass", "enum", "-passive", "-d", target])
             if output:
                 scan_results["amass"] = output.split("\n")
-    
+
     summary = summarize_scan_results(scan_results)
     console.print(summary)
     generate_report(target, scan_results)
@@ -104,9 +118,9 @@ def generate_report(target, scan_data):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Helvetica", size=12)
-    pdf.cell(200, 10, text=f"Penetration Testing Report: {target}", new_x="LMARGIN", new_y="NEXT", align="C")
+    pdf.cell(200, 10, txt=f"Penetration Testing Report: {target}", ln=True, align="C")
     for tool, results in scan_data.items():
-        pdf.cell(200, 10, text=f"{tool.upper()} Results:", new_x="LMARGIN", new_y="NEXT")
+        pdf.cell(200, 10, txt=f"{tool.upper()} Results:", ln=True)
         if isinstance(results, list):
             for result in results:
                 pdf.multi_cell(0, 10, str(result))
