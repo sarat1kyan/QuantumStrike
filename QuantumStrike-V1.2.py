@@ -118,17 +118,29 @@ def generate_report(target, scan_data):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Helvetica", size=12)
-    pdf.cell(200, 10, txt=f"Penetration Testing Report: {target}", ln=True, align="C")
+    
+    pdf.cell(0, 10, text=f"Penetration Testing Report: {target}", new_x="LMARGIN", new_y="NEXT", align="C")
+    
     for tool, results in scan_data.items():
-        pdf.cell(200, 10, txt=f"{tool.upper()} Results:", ln=True)
+        pdf.set_font("Helvetica", size=12, style="B")
+        pdf.cell(0, 10, text=f"{tool.upper()} Results:", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("Helvetica", size=12)
+        
         if isinstance(results, list):
             for result in results:
-                pdf.multi_cell(0, 10, str(result))
+                wrapped_text = pdf.multi_cell(0, 10, str(result), new_x="LMARGIN", new_y="NEXT")
+        elif isinstance(results, dict):
+            for key, value in results.items():
+                pdf.multi_cell(0, 10, f"{key}: {value}", new_x="LMARGIN", new_y="NEXT")
         else:
-            pdf.multi_cell(0, 10, str(results))
+            pdf.multi_cell(0, 10, str(results), new_x="LMARGIN", new_y="NEXT")
+    
     filepath = os.path.join(CONFIG["output_dir"], f"{target}_report.pdf")
-    pdf.output(filepath)
-    console.print(f"[bold green]Report saved to {filepath}[/bold green]")
+    try:
+        pdf.output(filepath)
+        console.print(f"[bold green]Report saved to {filepath}[/bold green]")
+    except Exception as e:
+        console.print(f"[bold red]Failed to save report: {str(e)}[/bold red]")
 
 def main():
     banner()
